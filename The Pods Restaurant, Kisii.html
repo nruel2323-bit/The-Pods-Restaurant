@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="description" width="device-width" initial-scale="1", viewport-fit="cover">
+<title>The Pods Restaurant, Kisii</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/home/sam/Desktop/The Pods/The-Pods-Restaurant/css/style.css">
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<nav>
+  <a class="logo" href="#hero">The <b>Pods</b></a>
+  <div class="links"><a href="#about">Our story</a><a href="#menu">Menu</a><a href="#events">Events</a><a href="#gallery">Gallery</a><a class="btn cta" href="#book" style="padding:.55em 1.2em;color:#1d1d1f">Book a table</a></div>
+</nav>
+
+<section id="hero">
+  <div>
+    <h1>Savouring flavours, creating memories.</h1>
+    <p>Cozy indoor pods, grilled favourites and good company, at Naivas Hyper Mall on the Kisii–Kisumu Highway.</p>
+    <div class="row"><a class="btn" href="#book">Book a table</a><a class="btn ghost" href="#menu">See the menu</a></div>
+  </div>
+</section>
+
+<section id="about" class="r">
+  <div class="panel">
+    <h2>One of Kisii’s most exciting new dining spots</h2>
+    <p>Since opening, The Pods has built a following on TikTok, Instagram and Facebook with viral videos and glowing reviews. The food, the ambiance, the cosy indoor spaces and the modern energy are why people keep talking about us.</p>
+    <p>Come see why. Slide into a pod, order something good, and stay a while.</p>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="panel">
+    <h2>The menu</h2>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="items" role="tabpanel" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="events" class="r">
+  <div class="panel">
+    <h2>What’s on at The Pods</h2>
+    <div class="ev">
+      <div><h3>Weekend grill nights</h3><p>Fresh from the fire, with music to match.</p></div>
+      <div><h3>Special nights</h3><p>Birthdays, date nights and group bookings in your own pod.</p></div>
+      <div><h3>Upcoming programmes</h3><p>Follow @the_podskisi for the latest dates.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="panel wide">
+    <h2>Food, space, atmosphere</h2>
+    <div class="gal"><div>Grills</div><div>The pods</div><div>Cocktails</div><div>Night glow</div><div>Wings</div><div>Friends</div></div>
+  </div>
+</section>
+
+<section id="book" class="r">
+  <div class="panel">
+    <h2>Book a table</h2>
+    <p>Fill this in and we’ll open WhatsApp with your request ready to send.</p>
+    <form id="bk">
+      <label class="f">Your name<input name="n" required autocomplete="name"></label>
+      <label>Date<input name="d" type="date" required></label>
+      <label>Time<input name="t" type="time" required></label>
+      <label>Guests<select name="g"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7 or more</option></select></label>
+      <label>Occasion<select name="o"><option>Just dining</option><option>Birthday</option><option>Date night</option><option>Group outing</option></select></label>
+      <button class="btn" type="submit">Send on WhatsApp</button>
+    </form>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="panel">
+    <h2>Find us</h2>
+    <div class="info">
+      <div><b>Where</b><br>Naivas Hyper Mall, along the Kisii–Kisumu Highway, Kisii</div>
+      <div><b>Hours</b><br>Daily, 10:00 am to 11:00 pm</div>
+      <div><b>Instagram</b><br><a href="https://www.instagram.com/the_podskisi">@the_podskisi</a></div>
+    </div>
+    <div class="row"><a class="btn" id="wa" href="#">Chat on WhatsApp</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&query=The+Pods+Restaurant+Naivas+Hyper+Mall+Kisii" target="_blank" rel="noopener">Open in Maps</a></div>
+  </div>
+</section>
+
+<footer><span>© The Pods Restaurant, Kisii</span><span>Savouring flavours, creating memories.</span></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const WA="254700000000"; // replace with the restaurant's WhatsApp number (country code, no +)
+const MENU={
+  "Appetizers":[["Nyama choma platter","Goat or beef, kachumbari, ugali","1,200"],["Grilled chicken","Half chicken, chips, salad","950"],["Fish fillet","Tilapia, ugali, greens","850"]],
+  "Mains":[["Pilau beef","Spiced rice, kachumbari","550"],["Chips masala","Crispy chips in tangy masala","400"],["Chicken stew","Slow-cooked, with chapati","650"]],
+  "Desserts":[["Ice cream sundae","Two scoops, chocolate drizzle","350"],["Chocolate brownie","Warm, with vanilla ice cream","400"],["Fruit salad","Fresh seasonal fruit","300"]],
+  "Drinks":[["Fresh juice","Passion, mango or mixed","250"],["Mocktail of the day","Ask your server","450"],["Soda or water","Chilled","100"]]
+};
+const tabs=document.getElementById("tabs"),items=document.getElementById("items");
+function show(k){
+  [...tabs.children].forEach(b=>b.setAttribute("aria-selected",b.dataset.k===k));
+  window.setFood&&window.setFood(k);items.innerHTML=MENU[k].map(i=>`<div class="item"><div><h3>${i[0]}</h3><span>${i[1]}</span></div><em>KSh ${i[2]}</em></div>`).join("");
+}
+Object.keys(MENU).forEach((k,i)=>{const b=document.createElement("button");b.textContent=k;b.dataset.k=k;b.setAttribute("role","tab");b.onclick=()=>show(k);tabs.appendChild(b)});
+show("Appetizers");
+document.getElementById("wa").href="https://wa.me/"+WA;
+document.getElementById("bk").addEventListener("submit",e=>{
+  e.preventDefault();const f=new FormData(e.target);
+  const m=`Hello The Pods, I’d like to book a table.\nName: ${f.get("n")}\nDate: ${f.get("d")}\nTime: ${f.get("t")}\nGuests: ${f.get("g")}\nOccasion: ${f.get("o")}`;
+  window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(m),"_blank");
+});
+
+// ---- 3D scene ----
+(function(){
+  const cv=document.getElementById("gl"),calm=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let R;try{R=new THREE.WebGLRenderer({canvas:cv,antialias:true})}catch(e){return}
+  R.setPixelRatio(Math.min(devicePixelRatio,2));
+  const S=new THREE.Scene(),BG=0x232325;S.background=new THREE.Color(BG);S.fog=new THREE.Fog(BG,8,40);
+  const C=new THREE.PerspectiveCamera(62,1,.1,100);
+  S.add(new THREE.HemisphereLight(0xb9b4ad,0x232325,.55));
+  const ORG=0xee9660,glow=new THREE.MeshStandardMaterial({color:ORG,emissive:ORG,emissiveIntensity:1.2,roughness:.4});
+  const dark=new THREE.MeshStandardMaterial({color:0x343437,roughness:.5,metalness:.3});
+  const light=new THREE.MeshStandardMaterial({color:0xc7ccd1,roughness:.4,metalness:.2});
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(40,120),new THREE.MeshStandardMaterial({color:0x19191b,roughness:.55,metalness:.35}));
+  floor.rotation.x=-Math.PI/2;floor.position.z=-30;S.add(floor);
+
+  // hero ring: the camera flies through it
+  const hero=new THREE.Group();hero.position.set(0,1.8,-3);
+  hero.add(new THREE.Mesh(new THREE.TorusGeometry(2.4,.13,16,90),glow));
+  const r2=new THREE.Mesh(new THREE.TorusGeometry(1.7,.06,12,80),light);r2.rotation.x=1.1;hero.add(r2);
+  const core=new THREE.Mesh(new THREE.SphereGeometry(.5,32,32),glow);hero.add(core);
+  const hl=new THREE.PointLight(ORG,2,14);hero.add(hl);S.add(hero);
+
+  // dining pods along the path
+  const pods=[];
+  for(let i=0;i<6;i++){
+    const side=i%2?1:-1,g=new THREE.Group();g.position.set(side*3.6,0,-11-i*8);
+    for(let k=-1;k<=1;k++){
+      const a=new THREE.Mesh(new THREE.TorusGeometry(1.7,.09,12,48,Math.PI),k===0?glow:dark);
+      a.position.set(0,0,k*1.3);g.add(a);
+    }
+    const t=new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,.08,32),light);t.position.y=.85;g.add(t);
+    const st=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.85,12),dark);st.position.y=.42;g.add(st);
+    [-1,1].forEach(s=>{const b=new THREE.Mesh(new THREE.BoxGeometry(.5,.5,2.1),dark);b.position.set(s*1.0,.25,0);g.add(b)});
+    const lamp=new THREE.Mesh(new THREE.SphereGeometry(.2,24,24),glow);lamp.position.y=2.3;g.add(lamp);
+    const pl=new THREE.PointLight(ORG,1.6,9);pl.position.y=2.1;g.add(pl);
+    g.rotation.y=-side*Math.PI/2*.35; S.add(g);pods.push(g);
+  }
+  // floating orbs
+  const orbs=[];
+  for(let i=0;i<46;i++){
+    const m=new THREE.Mesh(new THREE.SphereGeometry(.07+Math.random()*.16,16,16),i%3?glow:light);
+    m.position.set((Math.random()-.5)*14,.4+Math.random()*5,-Math.random()*60+4);
+    m.userData={y:m.position.y,p:Math.random()*6.28,s:.4+Math.random()*.6};S.add(m);orbs.push(m);
+  }
+
+  // ---- food showpiece: rides in front of the camera while the menu is on screen ----
+  S.add(C);const cl=new THREE.PointLight(0xffe2c4,1.5,14);C.add(cl);
+  const P=new THREE.Group();C.add(P);
+  const mat=(c,r=.6,e=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,emissive:e?c:0,emissiveIntensity:e});
+  const add=(g,o,x=0,y=0,z=0)=>{o.position.set(x,y,z);g.add(o);return o};
+  const M={};
+  // appetizers: nyama choma on a glowing grill
+  const gr=M.Appetizers=new THREE.Group();
+  add(gr,new THREE.Mesh(new THREE.BoxGeometry(2.6,.25,1.3),mat(0x2a2a2c,.8)),0,-.55,0);
+  for(let i=0;i<10;i++)add(gr,new THREE.Mesh(new THREE.SphereGeometry(.14,10,10),mat(0xff5a1f,.5,1.4)),-1+i*.22,-.4,((i%3)-1)*.3);
+  [-.3,.3].forEach(z=>{add(gr,new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,2.8,8),mat(0xb9b4ad,.3)),0,.05,z).rotation.z=Math.PI/2;
+    for(let i=0;i<5;i++)add(gr,new THREE.Mesh(new THREE.SphereGeometry(.26,16,12),mat(i%2?0x6b3418:0x84431f,.8)),-1+i*.5,.05,z).scale.set(1,.85,.9)});
+  const steam=[],sg=new THREE.Group();
+  for(let i=0;i<22;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(.16,10,10),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0,depthWrite:false}));s.userData={t:Math.random(),x:(Math.random()-.5)*2.2,z:(Math.random()-.5)*.8};sg.add(s);steam.push(s)}
+  // mains: plate of pilau and beef
+  const mn=M.Mains=new THREE.Group();
+  add(mn,new THREE.Mesh(new THREE.CylinderGeometry(1.2,1,.12,40),mat(0xe9e5de,.3)),0,-.5,0);
+  add(mn,new THREE.Mesh(new THREE.SphereGeometry(.7,24,16),mat(0xe0b878,.9)),-.35,-.3,0).scale.set(1,.55,1);
+  add(mn,new THREE.Mesh(new THREE.SphereGeometry(.42,16,12),mat(0x8a4521,.7)),.55,-.2,.1).scale.set(1.3,.8,1);
+  for(let i=0;i<5;i++)add(mn,new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),mat(i%2?0xc8452b:0x4f8a3a,.7)),.3+i*.2,-.32,-.6+i*.05);
+  // desserts: ice cream with chocolate drizzle
+  const ds=M.Desserts=new THREE.Group();
+  add(ds,new THREE.Mesh(new THREE.ConeGeometry(.5,1.5,32),mat(0xd9a05b,.8)),0,-.55,0).rotation.x=Math.PI;
+  [[0xf2a7c3,.62,.05],[0xf6ead4,.58,.6],[0x7a4a2a,.54,1.1]].forEach(c=>add(ds,new THREE.Mesh(new THREE.SphereGeometry(c[1],32,24),mat(c[0],.5)),0,c[2],0));
+  add(ds,new THREE.Mesh(new THREE.SphereGeometry(.56,32,16,0,Math.PI*2,0,1),mat(0x3a1c0c,.2)),0,1.1,0);
+  const drips=[],drops=[];
+  for(let i=0;i<7;i++){const a=i/7*Math.PI*2,c=add(ds,new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,1,8),mat(0x3a1c0c,.2)),Math.cos(a)*.5,1.4,Math.sin(a)*.5),e=add(ds,new THREE.Mesh(new THREE.SphereGeometry(.07,10,10),mat(0x3a1c0c,.2)),Math.cos(a)*.5,1.2,Math.sin(a)*.5);drips.push({c,e,a})}
+  for(let i=0;i<5;i++)drops.push(add(ds,new THREE.Mesh(new THREE.SphereGeometry(.06,10,10),mat(0x3a1c0c,.2)),(i-2)*.12,2.5,0));
+  // drinks: juice glass with bubbles
+  const dr=M.Drinks=new THREE.Group();
+  add(dr,new THREE.Mesh(new THREE.CylinderGeometry(.62,.46,1.7,32,1,true),new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.22,roughness:.1,side:THREE.DoubleSide})),0,.1,0);
+  add(dr,new THREE.Mesh(new THREE.CylinderGeometry(.58,.45,1.2,32),mat(0xff9a3d,.3,.5)),0,-.15,0);
+  add(dr,new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,2,8),mat(0xc8452b)),.25,.5,0).rotation.z=-.2;
+  add(dr,new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,.06,32),mat(0xffc04d,.6)),.62,.95,0).rotation.x=1.2;
+  const bub=[];for(let i=0;i<10;i++)bub.push(add(dr,new THREE.Mesh(new THREE.SphereGeometry(.05,8,8),mat(0xffe2b0,.3,.6)),(Math.random()-.5)*.6,0,(Math.random()-.5)*.6));
+  let act="Appetizers",want=0,sv=0;
+  Object.values(M).forEach(g=>P.add(g));
+  window.setFood=k=>{act=M[k]?k:"Appetizers";Object.keys(M).forEach(x=>M[x].visible=x===act);const s=act==="Appetizers"||act==="Mains";sg.visible=s;if(s)M[act].add(sg)};
+  window.setFood("Appetizers");
+  new IntersectionObserver(e=>want=e[0].isIntersecting?1:0,{threshold:.3}).observe(document.getElementById("menu"));
+  function food(t){
+    const w=innerWidth<800,tt=calm?0:t;
+    sv+=(want-sv)*.12;const sc=(w?.5:.9)*sv;
+    P.visible=sc>.02;if(!P.visible)return;
+    P.scale.setScalar(sc);P.position.set(w?0:2.3,(w?1.15:-.1)+Math.sin(tt*1.5)*.08,-5.5);
+    P.rotation.y=tt*.5;
+    if(sg.visible)steam.forEach(s=>{const u=(tt*.25+s.userData.t)%1;s.position.set(s.userData.x*(1+u*.3)+Math.sin(u*6+s.userData.t*9)*.15,.3+u*2.2,s.userData.z);s.material.opacity=.35*Math.sin(u*Math.PI);s.scale.setScalar(.6+u*1.6)});
+    if(act==="Desserts"){drips.forEach((d,i)=>{const h=.25+.35*(.5+.5*Math.sin(tt*.8+i*1.7));d.c.scale.y=h;d.c.position.y=1.4-h/2;d.e.position.y=1.4-h});drops.forEach((o,i)=>{o.position.y=2.9-((tt*.9+i*.37)%1)*1.3})}
+    if(act==="Drinks")bub.forEach((b,i)=>{b.position.y=-.7+((tt*.5+i*.31)%1)*1.4});
+  }
+  let tgt=0,cur=0,mx=0,my=0;
+  const prog=()=>{const h=document.documentElement.scrollHeight-innerHeight;return h>0?Math.min(1,Math.max(0,scrollY/h)):0};
+  addEventListener("scroll",()=>tgt=prog(),{passive:true});
+  addEventListener("pointermove",e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
+  function size(){R.setSize(innerWidth,innerHeight,false);C.aspect=innerWidth/innerHeight;C.updateProjectionMatrix()}
+  addEventListener("resize",size);size();tgt=prog();cur=tgt;
+
+  const clk=new THREE.Clock();
+  function frame(){
+    const t=clk.getElapsedTime();
+    cur+=(tgt-cur)*(calm?1:.07);
+    const z=7-cur*62;
+    C.position.set(Math.sin(cur*9)*.9+mx*.8,1.7-my*.4,z);
+    C.lookAt(C.position.x*.4+Math.sin(cur*9+1)*1.2,1.5,z-9);
+    if(!calm){
+      hero.rotation.z=t*.15;r2.rotation.y=t*.5;core.scale.setScalar(1+Math.sin(t*2)*.08);
+      orbs.forEach(o=>{o.position.y=o.userData.y+Math.sin(t*o.userData.s+o.userData.p)*.3});
+    }
+    food(t);R.render(S,C);requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
