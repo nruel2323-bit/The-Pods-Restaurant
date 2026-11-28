@@ -35,3 +35,5 @@ function loop(n){const s=scrollY/innerHeight,t=n/1000;
  cx.clearRect(0,0,W,H);if(tp<1){const k=.4+tp*1.6;for(const q of P){q.y-=q.v*k;if(q.y<-.05){q.y=1.05;q.x=Math.random()}cx.beginPath();cx.fillStyle=`rgba(255,${140+q.s*30|0},50,${(.25+.5*Math.sin(t*3+q.d)**2)*(.4+tp*.6)})`;cx.arc(q.x*W+Math.sin(t+q.d)*8,q.y*H,q.s*(1+tp),0,7);cx.fill()}}
  requestAnimationFrame(loop)}
 addEventListener('scroll',tour_,{passive:true});tour_();requestAnimationFrame(loop);
+const nv=document.querySelector('nav');burger.onclick=()=>nv.classList.toggle('open');
+nv.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nv.classList.remove('open')));
