@@ -20,7 +20,7 @@ nav div{display:flex;align-items:center;gap:22px}nav a{color:var(--mut);text-dec
 }
 /* phones: show the whole photo, same as laptop */
 @media(max-aspect-ratio:1/1){
- .scene{inset:auto;left:0;top:50%;width:100%;height:100vw;margin-top:-50vw}
+ .stage .scene{inset:auto;left:0;top:50%;width:100%;height:100vw;margin-top:-50vw}
 }
 /* entrance tour */
 .tour{height:400vh;position:relative;z-index:2}
